@@ -58,7 +58,7 @@ def crear_imagen(numero, texto):
     # NUMERO DE CONFESION
     # =====================================
 
-    fuente_numero = obtener_fuente(48)
+    fuente_numero = obtener_fuente(44)
 
     draw.text(
         (285, 388),
@@ -71,7 +71,7 @@ def crear_imagen(numero, texto):
     # AJUSTE AUTOMATICO
     # =====================================
 
-    tamano_fuente = 100
+    tamano_fuente = 60
 
     while tamano_fuente >= 30:
 
