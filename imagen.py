@@ -5,9 +5,9 @@ from PIL import ImageFont
 import textwrap
 import os
 
-# ======================================
-# ÁREA DE TEXTO
-# ======================================
+# =====================================
+# ZONA DEL TEXTO
+# =====================================
 
 ANCHO_CAJA = 820
 ALTO_CAJA = 520
@@ -18,49 +18,60 @@ Y_CAJA = 300
 
 def obtener_fuente(tamano):
 
-    try:
-        return ImageFont.truetype(
-            "fuentes/Anton-Regular.ttf",
-            tamano
-        )
+    ruta_fuente = os.path.join(
+        os.path.dirname(__file__),
+        "fuentes",
+        "Anton-Regular.ttf"
+    )
 
-    except Exception as e:
+    print(f"RUTA FUENTE: {ruta_fuente}")
+    print(f"EXISTE FUENTE: {os.path.exists(ruta_fuente)}")
 
-        print(f"ERROR CARGANDO FUENTE: {e}")
+    fuente = ImageFont.truetype(
+        ruta_fuente,
+        tamano
+    )
 
-        return ImageFont.load_default()
+    return fuente
 
 
 def crear_imagen(numero, texto):
+
+    print("========== DEBUG ==========")
+
+    print("ARCHIVOS RAIZ:")
+    print(os.listdir("."))
+
+    if os.path.exists("fuentes"):
+        print("ARCHIVOS FUENTES:")
+        print(os.listdir("fuentes"))
+
+    print("===========================")
 
     imagen = Image.open("fondo.png").convert("RGB")
 
     draw = ImageDraw.Draw(imagen)
 
-    # ======================================
-    # TEXTO EN MAYÚSCULAS
-    # ======================================
-
     texto = texto.upper()
 
-    # ======================================
-    # NÚMERO DE CONFESIÓN
-    # ======================================
+    # =====================================
+    # NUMERO DE CONFESION
+    # =====================================
 
-    fuente_numero = obtener_fuente(42)
+    fuente_numero = obtener_fuente(48)
 
     draw.text(
-        (300, 388),
+        (285, 388),
         str(numero),
         fill="white",
         font=fuente_numero
     )
 
-    # ======================================
-    # AJUSTE AUTOMÁTICO DE FUENTE
-    # ======================================
+    # =====================================
+    # AJUSTE AUTOMATICO
+    # =====================================
 
-    tamano_fuente = 90
+    tamano_fuente = 100
 
     while tamano_fuente >= 30:
 
@@ -68,14 +79,9 @@ def crear_imagen(numero, texto):
             tamano_fuente
         )
 
-        ancho_wrap = max(
-            12,
-            int(26 - ((90 - tamano_fuente) * 0.25))
-        )
-
         lineas = textwrap.wrap(
             texto,
-            width=ancho_wrap
+            width=18
         )
 
         texto_envuelto = "\n".join(
@@ -100,11 +106,11 @@ def crear_imagen(numero, texto):
         ):
             break
 
-        tamano_fuente -= 4
+        tamano_fuente -= 5
 
-    # ======================================
-    # CENTRADO
-    # ======================================
+    print(
+        f"TAMAÑO FINAL DE FUENTE: {tamano_fuente}"
+    )
 
     x = X_CAJA + (
         (ANCHO_CAJA - ancho_texto) / 2
@@ -114,9 +120,9 @@ def crear_imagen(numero, texto):
         (ALTO_CAJA - alto_texto) / 2
     )
 
-    # ======================================
-    # EFECTO NEGRITA
-    # ======================================
+    # =====================================
+    # TEXTO
+    # =====================================
 
     for dx, dy in [
         (-2, 0),
@@ -147,20 +153,15 @@ def crear_imagen(numero, texto):
         spacing=18
     )
 
-    # ======================================
-    # GUARDAR
-    # ======================================
-
     os.makedirs(
         "generadas",
         exist_ok=True
     )
 
-    ruta = f"generadas/confesion_{numero}.png"
-
-    imagen.save(
-        ruta,
-        quality=95
+    ruta = (
+        f"generadas/confesion_{numero}.png"
     )
+
+    imagen.save(ruta)
 
     return ruta
