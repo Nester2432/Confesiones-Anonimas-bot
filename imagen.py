@@ -6,72 +6,64 @@ import textwrap
 import os
 
 # =====================================
-# ZONA DEL TEXTO
+# CONFIGURACIÓN
 # =====================================
 
-ANCHO_CAJA = 820
-ALTO_CAJA = 520
+ANCHO_CAJA = 850
+ALTO_CAJA = 620
 
-X_CAJA = 130
+X_CAJA = 110
 Y_CAJA = 300
+
+# Posición del número de confesión
+NUMERO_X = 360
+NUMERO_Y = 385
+
+FUENTE_RUTA = os.path.join(
+    os.path.dirname(__file__),
+    "fuentes",
+    "Anton-Regular.ttf"
+)
 
 
 def obtener_fuente(tamano):
 
-    ruta_fuente = os.path.join(
-        os.path.dirname(__file__),
-        "fuentes",
-        "Anton-Regular.ttf"
-    )
-
-    print(f"RUTA FUENTE: {ruta_fuente}")
-    print(f"EXISTE FUENTE: {os.path.exists(ruta_fuente)}")
-
-    fuente = ImageFont.truetype(
-        ruta_fuente,
+    return ImageFont.truetype(
+        FUENTE_RUTA,
         tamano
     )
 
-    return fuente
-
 
 def crear_imagen(numero, texto):
-
-    print("========== DEBUG ==========")
-
-    print("ARCHIVOS RAIZ:")
-    print(os.listdir("."))
-
-    if os.path.exists("fuentes"):
-        print("ARCHIVOS FUENTES:")
-        print(os.listdir("fuentes"))
-
-    print("===========================")
 
     imagen = Image.open("fondo.png").convert("RGB")
 
     draw = ImageDraw.Draw(imagen)
 
-    texto = texto.upper()
+    texto = texto.upper().strip()
+
+    if not texto:
+        texto = "SIN TEXTO"
 
     # =====================================
-    # NUMERO DE CONFESION
+    # NÚMERO DE CONFESIÓN
     # =====================================
 
-    fuente_numero = obtener_fuente(38)
+    fuente_numero = obtener_fuente(42)
 
     draw.text(
-        (285, 398),
+        (NUMERO_X, NUMERO_Y),
         str(numero),
         fill="white",
         font=fuente_numero
     )
 
     # =====================================
-    # AJUSTE AUTOMATICO
+    # AJUSTE AUTOMÁTICO
     # =====================================
 
-    tamano_fuente = 60
+    tamano_fuente = 110
+    interlineado = 18
 
     while tamano_fuente >= 30:
 
@@ -79,9 +71,16 @@ def crear_imagen(numero, texto):
             tamano_fuente
         )
 
+        max_chars = max(
+            12,
+            int(
+                24 - ((110 - tamano_fuente) * 0.15)
+            )
+        )
+
         lineas = textwrap.wrap(
             texto,
-            width=18
+            width=max_chars
         )
 
         texto_envuelto = "\n".join(
@@ -92,7 +91,7 @@ def crear_imagen(numero, texto):
             (0, 0),
             texto_envuelto,
             font=fuente_texto,
-            spacing=18,
+            spacing=interlineado,
             align="center"
         )
 
@@ -106,11 +105,11 @@ def crear_imagen(numero, texto):
         ):
             break
 
-        tamano_fuente -= 5
+        tamano_fuente -= 2
 
-    print(
-        f"TAMAÑO FINAL DE FUENTE: {tamano_fuente}"
-    )
+    # =====================================
+    # CENTRADO
+    # =====================================
 
     x = X_CAJA + (
         (ANCHO_CAJA - ancho_texto) / 2
@@ -120,8 +119,11 @@ def crear_imagen(numero, texto):
         (ALTO_CAJA - alto_texto) / 2
     )
 
+    # baja un poco el texto visualmente
+    y += 60
+
     # =====================================
-    # TEXTO
+    # SOMBRA
     # =====================================
 
     for dx, dy in [
@@ -139,10 +141,14 @@ def crear_imagen(numero, texto):
             (x + dx, y + dy),
             texto_envuelto,
             font=fuente_texto,
-            fill="white",
+            fill="black",
             align="center",
-            spacing=18
+            spacing=interlineado
         )
+
+    # =====================================
+    # TEXTO PRINCIPAL
+    # =====================================
 
     draw.multiline_text(
         (x, y),
@@ -150,18 +156,23 @@ def crear_imagen(numero, texto):
         font=fuente_texto,
         fill="white",
         align="center",
-        spacing=18
+        spacing=interlineado
     )
+
+    # =====================================
+    # GUARDAR
+    # =====================================
 
     os.makedirs(
         "generadas",
         exist_ok=True
     )
 
-    ruta = (
-        f"generadas/confesion_{numero}.png"
-    )
+    ruta = f"generadas/confesion_{numero}.png"
 
-    imagen.save(ruta)
+    imagen.save(
+        ruta,
+        quality=95
+    )
 
     return ruta
