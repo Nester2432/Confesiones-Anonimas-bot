@@ -12,8 +12,8 @@ import os
 ANCHO_CAJA = 850
 ALTO_CAJA = 500
 
-X_CAJA = 110
-Y_CAJA = 300
+X_CAJA = 140
+Y_CAJA = 350
 
 # Posición del número de confesión
 NUMERO_X = 360
