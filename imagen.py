@@ -10,7 +10,7 @@ import os
 # =====================================
 
 ANCHO_CAJA = 850
-ALTO_CAJA = 620
+ALTO_CAJA = 500
 
 X_CAJA = 110
 Y_CAJA = 300
@@ -62,21 +62,16 @@ def crear_imagen(numero, texto):
     # AJUSTE AUTOMÁTICO
     # =====================================
 
-    tamano_fuente = 110
+    tamano_fuente = 90
     interlineado = 18
 
-    while tamano_fuente >= 30:
+    while tamano_fuente >= 24:
 
         fuente_texto = obtener_fuente(
             tamano_fuente
         )
 
-        max_chars = max(
-            12,
-            int(
-                24 - ((110 - tamano_fuente) * 0.15)
-            )
-        )
+        max_chars = 24
 
         lineas = textwrap.wrap(
             texto,
@@ -94,6 +89,12 @@ def crear_imagen(numero, texto):
             spacing=interlineado,
             align="center"
         )
+
+        cantidad_lineas = len(lineas)
+
+        if cantidad_lineas > 12:
+            tamano_fuente -= 2
+            continue
 
         ancho_texto = bbox[2] - bbox[0]
         alto_texto = bbox[3] - bbox[1]
