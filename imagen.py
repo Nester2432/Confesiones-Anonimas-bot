@@ -58,10 +58,10 @@ def crear_imagen(numero, texto):
     # NUMERO DE CONFESION
     # =====================================
 
-    fuente_numero = obtener_fuente(44)
+    fuente_numero = obtener_fuente(38)
 
     draw.text(
-        (285, 388),
+        (285, 398),
         str(numero),
         fill="white",
         font=fuente_numero
