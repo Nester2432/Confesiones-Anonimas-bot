@@ -16,8 +16,8 @@ X_CAJA = 195
 Y_CAJA = 410
 
 # Posición del número de confesión
-NUMERO_X = 305
-NUMERO_Y = 380
+NUMERO_X = 320
+NUMERO_Y = 385
 
 FUENTE_RUTA = os.path.join(
     os.path.dirname(__file__),
