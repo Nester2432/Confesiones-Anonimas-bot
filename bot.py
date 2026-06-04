@@ -18,6 +18,7 @@ from imagen import crear_imagen
 # ==================================================
 
 TOKEN = os.getenv("BOT_TOKEN")
+print("BOT_TOKEN =", repr(TOKEN))
 
 GROUP_ID = -5038962956
 
