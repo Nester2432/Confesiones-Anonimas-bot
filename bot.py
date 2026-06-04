@@ -1,4 +1,5 @@
 import sqlite3
+import os
 
 from telegram import Update
 from telegram.ext import (
@@ -16,7 +17,7 @@ from imagen import crear_imagen
 # CONFIGURACIÓN
 # ==================================================
 
-TOKEN = "8884434176:AAF8cREiGnywdkFNLa80VEhbt2pY7ZgfY-4"
+TOKEN = os.getenv("BOT_TOKEN")
 
 GROUP_ID = -5038962956
 
